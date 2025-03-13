@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Tarefa</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>✏ Editar Tarefa</h1>
+    </header>
+
+    <main>
+        <section class="edit-task-container">
+            <h2>Modificar Tarefa</h2>
+            <form id="edit-task-form">
+                <input type="hidden" id="task-id">
+                <input type="text" id="edit-title" required>
+                <textarea id="edit-description" required></textarea>
+                <select id="edit-status">
+                    <option value="pendente">Pendente</option>
+                    <option value="concluida">Concluída</option>
+                </select>
+                <button type="submit">Salvar Alterações</button>
+            </form>
+            <button class="back-btn" onclick="goBack()">Voltar</button>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
