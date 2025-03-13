@@ -1,13 +1,30 @@
 const API_URL = "http://localhost:3333/tarefas";
 const taskList = document.getElementById('task-list');
+const searchInput = document.getElementById('search');
+const statusFilter = document.getElementById('status-filter');
+const searchButton = document.getElementById('search-btn');
 
 // Carregar tarefas
 async function loadTasks() {
     const response = await fetch(API_URL);
     const tasks = await response.json();
-    taskList.innerHTML = '';
+    filterAndDisplayTasks(tasks);
+}
 
-    tasks.forEach(task => {
+// Filtrar e exibir as tarefas
+function filterAndDisplayTasks(tasks) {
+    const searchQuery = searchInput.value.toLowerCase();
+    const selectedStatus = statusFilter.value;
+
+    // Filtra as tarefas de acordo com o título e status
+    const filteredTasks = tasks.filter(task => {
+        const matchesSearch = task.title.toLowerCase().includes(searchQuery);
+        const matchesStatus = selectedStatus ? task.status === selectedStatus : true;
+        return matchesSearch && matchesStatus;
+    });
+
+    taskList.innerHTML = '';
+    filteredTasks.forEach(task => {
         const taskItem = document.createElement('li');
         taskItem.classList.add('task-item');
         if (task.status === 'concluida') taskItem.classList.add('completed');
@@ -54,6 +71,9 @@ function editTask(id) {
 function goBack() {
     window.location.href = "index.html";
 }
+
+// Filtrar tarefas quando o botão de pesquisa for clicado
+searchButton.addEventListener('click', loadTasks);
 
 // Carregar tarefas ao iniciar a página
 document.addEventListener("DOMContentLoaded", loadTasks);

@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>📌 Minha Lista de Tarefas</h1>
+        <h1> Pagina de cadastro de tarefas </h1>
     </header>
 
     <main>
@@ -22,10 +22,21 @@
         </section>
 
         <section class="task-list-container">
-            <h2>📋 Minhas Tarefas</h2>
+            <h2> Minhas Tarefas</h2>
             <ul id="task-list"></ul>
         </section>
     </main>
+<!-- Campo de pesquisa e filtro -->
+<section class="task-filter">
+    <input type="text" id="search" placeholder="Pesquisar por título...">
+    <select id="status-filter">
+        <option value="">Filtrar por Status</option>
+        <option value="pendente">Pendente</option>
+        <option value="concluida">Concluída</option>
+    </select>
+    <button id="search-btn">Pesquisar</button>
+</section>
+
 
     <script src="script.js"></script>
 </body>
