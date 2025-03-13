@@ -1,30 +1,27 @@
 const API_URL = "http://localhost:3333/tarefas";
 const taskList = document.getElementById('task-list');
 const searchInput = document.getElementById('search');
-const statusFilter = document.getElementById('status-filter');
-const searchButton = document.getElementById('search-btn');
+const filterStatus = document.getElementById('filter-status');
 
 // Carregar tarefas
 async function loadTasks() {
-    const response = await fetch(API_URL);
-    const tasks = await response.json();
-    filterAndDisplayTasks(tasks);
-}
-
-// Filtrar e exibir as tarefas
-function filterAndDisplayTasks(tasks) {
+    let url = API_URL;
     const searchQuery = searchInput.value.toLowerCase();
-    const selectedStatus = statusFilter.value;
+    const statusFilter = filterStatus.value;
 
-    // Filtra as tarefas de acordo com o título e status
-    const filteredTasks = tasks.filter(task => {
-        const matchesSearch = task.title.toLowerCase().includes(searchQuery);
-        const matchesStatus = selectedStatus ? task.status === selectedStatus : true;
-        return matchesSearch && matchesStatus;
-    });
+    if (searchQuery) {
+        url += `?search=${searchQuery}`;
+    }
 
+    if (statusFilter) {
+        url += `&status=${statusFilter}`;
+    }
+
+    const response = await fetch(url);
+    const tasks = await response.json();
     taskList.innerHTML = '';
-    filteredTasks.forEach(task => {
+
+    tasks.forEach(task => {
         const taskItem = document.createElement('li');
         taskItem.classList.add('task-item');
         if (task.status === 'concluida') taskItem.classList.add('completed');
@@ -67,13 +64,9 @@ function editTask(id) {
     window.location.href = `edit.html?id=${id}`;
 }
 
-// Voltar para a página principal
-function goBack() {
-    window.location.href = "index.html";
-}
-
-// Filtrar tarefas quando o botão de pesquisa for clicado
-searchButton.addEventListener('click', loadTasks);
-
 // Carregar tarefas ao iniciar a página
 document.addEventListener("DOMContentLoaded", loadTasks);
+
+// Pesquisa
+searchInput.addEventListener('input', loadTasks);
+filterStatus.addEventListener('change', loadTasks);
