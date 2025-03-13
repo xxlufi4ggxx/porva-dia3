@@ -3,7 +3,7 @@ const API_URL = "http://localhost:3333/tarefas";
 // Carregar a tarefa para edição
 async function loadTaskForEditing() {
     const urlParams = new URLSearchParams(window.location.search);
-    const taskId = urlParams.get('id');  // Pega o ID da tarefa na URL
+    const taskId = urlParams.get('id');
 
     const response = await fetch(`${API_URL}/${taskId}`);
     const task = await response.json();
@@ -31,7 +31,6 @@ document.getElementById('edit-task-form').addEventListener('submit', async funct
         body: JSON.stringify(updatedTask)
     });
 
-    // Redireciona de volta para a página principal após salvar
     window.location.href = "index.html";
 });
 
@@ -40,5 +39,5 @@ function goBack() {
     window.location.href = "index.html";
 }
 
-// Carregar a tarefa para edição assim que a página for carregada
+// Carregar a tarefa para edição ao iniciar a página
 document.addEventListener('DOMContentLoaded', loadTaskForEditing);

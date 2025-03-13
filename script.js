@@ -1,26 +1,16 @@
 const API_URL = "http://localhost:3333/tarefas";
 const taskList = document.getElementById('task-list');
-const searchInput = document.getElementById('search');
-const filterStatus = document.getElementById('filter-status');
 
 // Carregar tarefas
 async function loadTasks() {
-    let url = API_URL;
-    const searchQuery = searchInput.value.toLowerCase();
-    const statusFilter = filterStatus.value;
-
-    if (searchQuery) {
-        url += `?search=${searchQuery}`;
-    }
-
-    if (statusFilter) {
-        url += `&status=${statusFilter}`;
-    }
-
-    const response = await fetch(url);
+    const response = await fetch(API_URL);
     const tasks = await response.json();
-    taskList.innerHTML = '';
+    displayTasks(tasks);
+}
 
+// Exibir tarefas filtradas
+function displayTasks(tasks) {
+    taskList.innerHTML = '';
     tasks.forEach(task => {
         const taskItem = document.createElement('li');
         taskItem.classList.add('task-item');
@@ -28,14 +18,14 @@ async function loadTasks() {
 
         taskItem.innerHTML = `
             <span>${task.title}</span>
-            <button class="delete-btn" onclick="deleteTask(${task.id})">🗑</button>
             <button onclick="editTask(${task.id})">✏</button>
+            <button class="delete-btn" onclick="deleteTask(${task.id})">🗑</button>
         `;
         taskList.appendChild(taskItem);
     });
 }
 
-// Adicionar tarefa
+// Adicionar nova tarefa
 document.getElementById('task-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const newTask = {
@@ -64,9 +54,23 @@ function editTask(id) {
     window.location.href = `edit.html?id=${id}`;
 }
 
+// Filtrar tarefas por título e status
+async function filterTasks() {
+    const searchText = document.getElementById('search').value.toLowerCase();
+    const selectedStatus = document.getElementById('filter-status').value;
+
+    const response = await fetch(API_URL);
+    let tasks = await response.json();
+
+    if (searchText) {
+        tasks = tasks.filter(task => task.title.toLowerCase().includes(searchText));
+    }
+    if (selectedStatus) {
+        tasks = tasks.filter(task => task.status === selectedStatus);
+    }
+
+    displayTasks(tasks);
+}
+
 // Carregar tarefas ao iniciar a página
 document.addEventListener("DOMContentLoaded", loadTasks);
-
-// Pesquisa
-searchInput.addEventListener('input', loadTasks);
-filterStatus.addEventListener('change', loadTasks);
